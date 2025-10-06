@@ -1,0 +1,13 @@
+<odoo>
+  <record id="group_service_ustalar" model="res.groups">
+    <field name="name">Service Ustalar</field>
+    <field name="category_id" ref="base.module_category_sales"/>
+  </record>
+
+  <record id="group_office_managers" model="res.groups">
+    <field name="name">Office Managers</field>
+    <field name="category_id" ref="base.module_category_sales"/>
+    <!-- Sales Manager implied (safe because 'sales_team' is in depends) -->
+    <field name="implied_ids" eval="[(4, ref('sales_team.group_sale_manager'))]"/>
+  </record>
+</odoo>

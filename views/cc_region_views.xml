@@ -1,0 +1,59 @@
+<odoo>
+  <!-- LIST -->
+  <record id="view_cc_region_list" model="ir.ui.view">
+    <field name="name">cc.region.list</field>
+    <field name="model">cc.region</field>
+    <field name="arch" type="xml">
+      <list string="Hududlar (Tuman)">
+        <field name="name"/>
+        <field name="country_id"/>
+        <field name="state_id"/>
+        <field name="code"/>
+      </list>
+    </field>
+  </record>
+
+  <!-- FORM -->
+  <record id="view_cc_region_form" model="ir.ui.view">
+    <field name="name">cc.region.form</field>
+    <field name="model">cc.region</field>
+    <field name="arch" type="xml">
+      <form string="Region">
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="code"/>
+          </group>
+          <group string="Hudud">
+            <field name="country_id"/>
+            <field name="state_id" domain="[('country_id','=',country_id)]"/>
+          </group>
+          <group>
+            <field name="note"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- SEARCH (optional but useful) -->
+  <record id="view_cc_region_search" model="ir.ui.view">
+    <field name="name">cc.region.search</field>
+    <field name="model">cc.region</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="name"/>
+        <field name="country_id"/>
+        <field name="state_id"/>
+      </search>
+    </field>
+  </record>
+
+  <!-- ACTION -->
+  <record id="action_cc_region" model="ir.actions.act_window">
+    <field name="name">Hududlar (Tuman)</field>
+    <field name="res_model">cc.region</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_cc_region_search"/>
+  </record>
+</odoo>

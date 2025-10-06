@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <!-- LIST -->
+  <record id="view_cc_employee_list" model="ir.ui.view">
+    <field name="name">cc.employee.list</field>
+    <field name="model">cc.employee</field>
+    <field name="arch" type="xml">
+      <list string="Hodimlar" default_order="name">
+        <field name="image_1920" widget="image" options="{'size': [32, 32]}" optional="show"/>
+        <field name="name"/>
+        <field name="user_id"/>
+        <field name="is_usta" optional="hide"/>
+        <field name="usta_status" string="Bot faol" optional="show" 
+               invisible="is_usta == False"/>
+        <field name="service_region_ids" widget="many2many_tags" string="Ish hududi" optional="hide"/>
+        <field name="phone"/>
+        <field name="active"/>
+      </list>
+    </field>
+  </record>
+
+  <!-- FORM -->
+  <record id="view_cc_employee_form" model="ir.ui.view">
+    <field name="name">cc.employee.form</field>
+    <field name="model">cc.employee</field>
+    <field name="arch" type="xml">
+      <form string="Hodim">
+        <sheet>
+          <group>
+            <group>
+              <field name="image_1920" widget="image" class="oe_avatar"
+                   options="{'size': [128, 128], 'preview_image': 'image_1920'}"/>
+              <field name="name" required="1"/>
+              <field name="user_id"/>
+              <field name="is_usta"/>
+              <field name="usta_status" string="Usta Status (Bot faol)" 
+                     invisible="is_usta == False"
+                     help="Agar False bo'lsa, usta botda cheklangan rejimda ishlaydi"/>
+              <field name="phone"/>
+              <field name="email"/>
+              <field name="active"/>
+            </group>
+            <group string="Hudud filtr (ixtiyoriy)">
+              <field name="state_ids" widget="many2many_tags" placeholder="Viloyat(lar)"/>
+            </group>
+          </group>
+
+          <group string="Usta ish hududi">
+            <field name="service_region_ids"
+                   widget="many2many_tags"
+                   options="{'no_create': False}"
+                   invisible="is_usta == False"
+                   domain="[('state_id','in', state_ids)]"/>
+          </group>
+
+          <group string="Telegram">
+            <field name="tg_user_id" readonly="1"/>
+            <field name="tg_chat_id" readonly="1"/>
+          </group>
+
+          <group>
+            <field name="note" placeholder="Izoh..."/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- KANBAN -->
+  <record id="view_cc_employee_kanban" model="ir.ui.view">
+    <field name="name">cc.employee.kanban</field>
+    <field name="model">cc.employee</field>
+    <field name="arch" type="xml">
+      <kanban default_group_by="is_usta">
+        <field name="is_usta"/>
+        <field name="usta_status"/>
+        <templates>
+          <t t-name="kanban-box">
+            <div class="oe_kanban_global_click o_kanban_record">
+              <div class="o_kanban_image">
+                <img t-att-src="kanban_image('cc.employee','image_1920',record.id.raw_value)"/>
+              </div>
+              <div class="o_kanban_details">
+                <strong t-esc="record.name.value"/>
+                <div t-esc="record.phone.value"/>
+                <div t-if="record.is_usta.value">
+                  <span>🔧 Usta</span>
+                  <span t-if="record.usta_status.value" class="badge badge-success ms-1">Bot faol</span>
+                  <span t-else="" class="badge badge-warning ms-1">Bot cheklangan</span>
+                </div>
+              </div>
+            </div>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+  
+
+  <!-- SEARCH -->
+  <record id="view_cc_employee_search" model="ir.ui.view">
+    <field name="name">cc.employee.search</field>
+    <field name="model">cc.employee</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="name"/>
+        <field name="user_id"/>
+        <filter name="flt_usta" string="Ustalar" domain="[('is_usta','=',True)]"/>
+        <filter name="flt_usta_active_bot" string="Bot faol ustalar" 
+                domain="[('is_usta','=',True),('usta_status','=',True)]"/>
+        <filter name="flt_usta_restricted_bot" string="Bot cheklangan ustalar" 
+                domain="[('is_usta','=',True),('usta_status','=',False)]"/>
+        <filter name="flt_office" string="Office Managerlar" domain="[('is_usta','=',False)]"/>
+        <separator/>
+        <filter name="flt_active" string="Faol" domain="[('active','=',True)]"/>
+        <filter name="flt_inactive" string="Faol emas" domain="[('active','=',False)]"/>
+      </search>
+    </field>
+  </record>
+</odoo>

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cc_region_all,access.cc.region.all,call_center_employees.model_cc_region,,1,1,1,1
+access_cc_employee_all,access.cc.employee.all,call_center_employees.model_cc_employee,,1,1,1,1
